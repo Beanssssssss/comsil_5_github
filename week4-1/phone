@@ -1,0 +1,22 @@
+#!/bin/bash
+# $# 인자개수 받음 -eq -> equal
+if [ $# -eq 0 ]; then
+    echo "인자 0개"
+    exit 1
+fi
+
+# $*는 모든 인자를 공백 기준으로 나눈것 "$*" 모든 인자를 하나의 문자열로
+keyword="$*"
+keyword=${keyword// /|}
+
+# keyword들어간 mydata 검색
+result=$(egrep -i "$keyword" mydata.txt)
+
+# 변수값이 비어있으면 true반환
+if [ -z "$result" ]; then
+    echo "[$keyword] 에 대한 결과가 없습니다."
+    exit 2
+fi
+
+# 결과 출력 형식은 display.awk에 있음
+echo "$result" | awk -f display.awk
